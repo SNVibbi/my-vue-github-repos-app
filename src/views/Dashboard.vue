@@ -111,7 +111,7 @@
           });
           this.repos = response.data;
         } catch (error) {
-          console.error('Error fetching repositories:', error);
+          // console.error('Error fetching repositories:', error);
         }
       },
       async deleteRepo(repoName) {

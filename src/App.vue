@@ -19,7 +19,7 @@
     },
     data() {
       return {
-        currentSection: 'home' // Default section to show
+        currentSection: 'about' // Default section to show
       };
     },
     methods: {
