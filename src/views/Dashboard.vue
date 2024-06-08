@@ -77,8 +77,8 @@
               contributions.
             </p>
             <p class="text-lg">
-              Outside of coding, I enjoy watching Anime and photography,
-              constantly exploring the beauty in the world through my lens.
+              Outside of coding, I enjoy watching Anime,photography and Reading,
+              constantly exploring the beauty in the world through the experience of different books.
             </p>
           </div>
         </div>
