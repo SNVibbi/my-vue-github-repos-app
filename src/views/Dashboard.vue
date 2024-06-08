@@ -198,8 +198,8 @@ export default {
       this.error = null;
 
       // Log the GitHub token and the URL
-      console.log('GitHub Token:', process.env.VUE_APP_GITHUB_TOKEN);
-      console.log('Fetching URL:', `https://api.github.com/users/SNVibbi/repos`);
+      // console.log('GitHub Token:', process.env.VUE_APP_GITHUB_TOKEN);
+      // console.log('Fetching URL:', `https://api.github.com/users/SNVibbi/repos`);
 
       try {
         const response = await axios.get('https://api.github.com/users/SNVibbi/repos', {
