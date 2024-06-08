@@ -2,6 +2,9 @@
   <div class="container mx-auto p-4">
     <div v-if="currentSection === 'home'">
       <h2 class="text-xl font-bold mb-4">My GitHub Repositories</h2>
+      <div class="flex justify-end mb-4">
+        <button @click="showModal = true" class="bg-green-500 text-white px-4 py-2 rounded">Create Repository</button>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <div
           v-for="repo in paginatedRepos"
@@ -77,7 +80,7 @@
               contributions.
             </p>
             <p class="text-lg">
-              Outside of coding, I enjoy watching Anime,photography and Reading,
+              Outside of coding, I enjoy watching Anime, photography, and reading,
               constantly exploring the beauty in the world through the experience of different books.
             </p>
           </div>
@@ -147,20 +150,33 @@
         </div>
       </div>
     </div>
+    <CreateRepoModal :show="showModal" @close="showModal = false" @create-repo="createRepo" />
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+import CreateRepoModal from '@/components/CreateRepoModal.vue';
 
 export default {
-  name: "DashboardView",
-  props: ["currentSection"],
+  name: 'DashboardView',
+  components: {
+    CreateRepoModal
+  },
+  props: {
+    currentSection: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       repos: [],
       currentPage: 1,
       perPage: 8,
+      loading: true,
+      error: null,
+      showModal: false
     };
   },
   computed: {
@@ -171,35 +187,52 @@ export default {
     },
     totalPages() {
       return Math.ceil(this.repos.length / this.perPage);
-    },
+    }
   },
   mounted() {
     this.fetchRepos();
   },
   methods: {
     async fetchRepos() {
+      this.loading = true;
+      this.error = null;
+
+      // Log the GitHub token and the URL
+      console.log('GitHub Token:', process.env.VUE_APP_GITHUB_TOKEN);
+      console.log('Fetching URL:', `https://api.github.com/users/SNVibbi/repos`);
+
       try {
-        const response = await axios.get("/api/users/SNVibbi/repos", {
-          headers: { Authorization: `Bearer ${process.env.VUE_APP_GITHUB_TOKEN}` },
+        const response = await axios.get('https://api.github.com/users/SNVibbi/repos', {
+          headers: { Authorization: `token ${process.env.VUE_APP_GITHUB_TOKEN}` }
         });
         this.repos = response.data;
       } catch (error) {
-        console.error("Error fetching repositories:", error);
+        this.error = 'Error fetching repositories. Please try again later.';
+        console.error('Error fetching repositories:', error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async createRepo(repoData) {
+      try {
+        const response = await axios.post('https://api.github.com/user/repos', repoData, {
+          headers: { Authorization: `token ${process.env.VUE_APP_GITHUB_TOKEN}` }
+        });
+        this.repos.push(response.data);
+        this.fetchRepos();
+      } catch (error) {
+        this.error = 'Error creating repository. Please try again later.';
+        console.error('Error creating repository:', error);
       }
     },
     async deleteRepo(repoName) {
       try {
-        const response = await axios.delete(`/api/repos/SNVibbi/${repoName}`, {
-          headers: { Authorization: `Bearer ${process.env.VUE_APP_GITHUB_TOKEN}` },
+        await axios.delete(`https://api.github.com/repos/SNVibbi/${repoName}`, {
+          headers: { Authorization: `token ${process.env.VUE_APP_GITHUB_TOKEN}` }
         });
-
-        // Optionally log the response to ensure it's successful
-        console.log(response.data);
-
-        // Remove the repo from the list if the deletion was successful
-        this.repos = this.repos.filter((repo) => repo.name !== repoName);
+        this.repos = this.repos.filter(repo => repo.name !== repoName);
       } catch (error) {
-        console.error("Error deleting repository:", error);
+        console.error('Error deleting repository:', error);
       }
     },
     nextPage() {
@@ -211,26 +244,25 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
-    },
-  },
+    }
+  }
 };
 </script>
-  
-  <style scoped>
-  .hover\:underline:hover {
-    text-decoration: underline;
-  }
-  .hover\:bg-red-700:hover {
-    background-color: #c53030; 
-  .hover\:bg-blue-700:hover {
-    background-color: #2b6cb0; 
-  }
-  .hover\:bg-gray-700:hover {
-    background-color: #4a5568; 
-  }
-  .cursor-not-allowed {
-    cursor: not-allowed;
-  }
+
+<style scoped>
+.hover\:underline:hover {
+  text-decoration: underline;
 }
-  </style>
-  
+.hover\:bg-red-700:hover {
+  background-color: #c53030; 
+}
+.hover\:bg-blue-700:hover {
+  background-color: #2b6cb0; 
+}
+.hover\:bg-gray-700:hover {
+  background-color: #4a5568; 
+}
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+</style>
