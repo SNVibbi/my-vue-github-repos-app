@@ -4,11 +4,11 @@
 ```
 INTRODUCTION
 
-This application allows users to manage their Github repositories directly from user-freindly interface. It has features to create, update, and delete repositories, it simplifies the Github repository management process without needin to directly interacting with Github's web interface or Api.
+This application allows users to manage their Github repositories directly from user-freindly interface. It has features to create, update, and delete repositories, it simplifies the Github repository management process without needing to directly interacting with Github's web interface or Api.
 
 
 FEATURES
-
+. Create Repositories: Launch new Github repositories with a simple form.
 . Delete Repositories: Remove unwanted repositories directly from the app.
 . View Repository Details: Navigate to a detailed page for any repository.
 
@@ -21,7 +21,6 @@ TECHNOLOGY
 
 
 
-This template provides a minimal setup to get Vue working in Vite with HMR and some ESLint rules.
 ```
 
 ### Customize configuration
