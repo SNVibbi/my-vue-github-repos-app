@@ -1,8 +1,7 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import Dashboard from '@/views/Dashboard.vue';
-import RepositoryDetails from '../components/RepositoryDetails.vue';
-import NotFound from '../components/NotFound.vue';
+import RepositoryDetails from '@/components/RepositoryDetails.vue';
+import NotFound from '@/components/NotFound.vue';
 
 const routes = [
   {
@@ -14,7 +13,7 @@ const routes = [
     path: '/repository/:id',
     name: 'RepositoryDetails',
     component: RepositoryDetails,
-    props: true
+    props: true,
   },
   {
     path: '/:catchAll(.*)*',
